@@ -1,31 +1,40 @@
+import { env } from './config/env'; // valida variáveis de ambiente antes de qualquer coisa
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import materiaisRoutes from './routes/materiais';
-
-dotenv.config();
+import { errorHandler } from './middlewares/errorHandler';
+import pool from './config/db';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
+const origins = env.ALLOWED_ORIGINS;
 app.use(
   cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    origin: origins.length === 1 && origins[0] === '*' ? '*' : origins,
+    methods: ['GET', 'OPTIONS'],
+    allowedHeaders: ['Content-Type'],
   }),
 );
 app.options('*', cors());
 app.use(express.json());
 
-// Rota de health check
-app.get('/', (req, res) => {
-  res.json({ status: 'API online', versao: '1.0.0' });
+app.get('/health', (_req, res) => {
+  res.json({ status: 'ok', versao: '1.0.0' });
 });
 
-// Rotas
+app.get('/ready', async (_req, res) => {
+  try {
+    await pool.query('SELECT 1');
+    res.json({ status: 'ready' });
+  } catch {
+    res.status(503).json({ status: 'unavailable' });
+  }
+});
+
 app.use('/materiais', materiaisRoutes);
 
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta:  http://localhost:${PORT}`);
+app.use(errorHandler);
+
+app.listen(env.PORT, () => {
+  console.log(`Servidor rodando na porta: http://localhost:${env.PORT}`);
 });
