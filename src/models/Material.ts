@@ -1,15 +1,11 @@
 import pool from '../config/db';
+import type { Material } from '../types/material';
 
-export interface MaterialRow {
-  id: number;
-  [key: string]: unknown;
-}
-
-const Material = {
-  findAll: async (): Promise<MaterialRow[]> => {
-    const { rows } = await pool.query<MaterialRow>('SELECT * FROM material ORDER BY id ASC');
+const MaterialModel = {
+  findAll: async (): Promise<Material[]> => {
+    const { rows } = await pool.query<Material>('SELECT * FROM material ORDER BY id ASC');
     return rows;
   },
 };
 
-export default Material;
+export default MaterialModel;
