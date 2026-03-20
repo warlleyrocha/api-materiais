@@ -8,6 +8,7 @@ import { errorHandler } from "./middlewares/errorHandler";
 import pool from "./config/db";
 
 const app = express();
+app.disable("x-powered-by");
 
 const origins = env.ALLOWED_ORIGINS;
 app.use(
