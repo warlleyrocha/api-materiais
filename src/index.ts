@@ -1,6 +1,7 @@
 import { env } from "./config/env"; // valida variáveis de ambiente antes de qualquer coisa
 import express from "express";
 import cors from "cors";
+import path from "node:path";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./config/swagger";
 import materiaisRoutes from "./routes/materiais";
@@ -22,6 +23,10 @@ app.options("*", cors());
 app.use(express.json());
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+app.get("/", (_req, res) => {
+  res.sendFile(path.join(__dirname, "views", "home.html"));
+});
 
 /**
  * @openapi
@@ -81,6 +86,22 @@ app.use((_req, res) => {
 app.use(errorHandler);
 
 app.listen(env.PORT, () => {
-  console.log(`Servidor rodando na porta: http://localhost:${env.PORT}`);
-  console.log(`Swagger disponível em: http://localhost:${env.PORT}/api-docs`);
+  const g = "\x1b[32m";
+  const d = "\x1b[2;32m";
+  const r = "\x1b[0m";
+
+  console.log(`${g}
+ █████╗ ██████╗ ██╗    ███╗   ███╗ █████╗ ████████╗
+██╔══██╗██╔══██╗██║    ████╗ ████║██╔══██╗╚══██╔══╝
+███████║██████╔╝██║    ██╔████╔██║███████║   ██║
+██╔══██║██╔═══╝ ██║    ██║╚██╔╝██║██╔══██║   ██║
+██║  ██║██║     ██║    ██║ ╚═╝ ██║██║  ██║   ██║
+╚═╝  ╚═╝╚═╝     ╚═╝    ╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝${r}`);
+  console.log(`${d}─────────────────────────────────────────────────${r}`);
+  console.log(`${d}// DESCRIÇÃO${r}`);
+  console.log(`${g}   API construída para realizar listagem de materiais.${r}`);
+  console.log(`${d}─────────────────────────────────────────────────${r}`);
+  console.log(`${d}→ app    ${r}${g}http://localhost:${env.PORT}${r}`);
+  console.log(`${d}→ docs   ${r}${g}http://localhost:${env.PORT}/api-docs${r}`);
+  console.log(`${d}─────────────────────────────────────────────────${r}\n`);
 });
