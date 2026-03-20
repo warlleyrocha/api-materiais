@@ -1,7 +1,7 @@
 {
   "name": "api-materiais",
   "version": "1.0.0",
-  "description": "API de materiais FFA",
+  "description": "API de materiais",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc && cp -r src/views dist/views",

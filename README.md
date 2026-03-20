@@ -36,7 +36,7 @@
 ## Descrição do projeto
 
 <p align="justify">
-  API REST para consulta de materiais da FFA. Desenvolvida com Node.js, Express e TypeScript, expõe um endpoint paginado para listagem de materiais cadastrados no banco de dados PostgreSQL.
+  API REST para consulta de materiais. Desenvolvida com Node.js, Express e TypeScript, expõe um endpoint paginado para listagem de materiais cadastrados no banco de dados PostgreSQL.
 </p>
 
 <p align="justify">
